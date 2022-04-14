@@ -7,9 +7,12 @@ option objc_class_prefix = "Proto";
 
 package com.sinch.est.services.auth.grpc.v1;
 
+/**
+* Not 100% sure what an auth digest is
+*/
 message AuthorizationDigest {
-  optional string method = 1;
-  optional string realm = 2;
+  optional string method = 1;  // The method
+  optional string realm = 2; // The Realm
   optional string qop = 3;
   optional string nonce = 4;
   optional string opaque = 5;
@@ -23,9 +26,13 @@ message AuthorizationDigest {
   optional string body = 13;
 }
 
+/**
+* The actual request for authorization
+*/
 message AuthorizationRequest {
-  optional string region = 1;
-  optional string source_ip = 2;
+  string region = 1; // This is required
+  /** Also added this style comment */
+  optional string source_ip = 2; // This is optional
   optional uint32 source_port = 3;
   optional string method = 4;
   optional string transport = 5;
@@ -35,6 +42,9 @@ message AuthorizationRequest {
   AuthorizationDigest auth_digest = 9; // This would be for future registrations.
 }
 
+/**
+* The auth result itself
+*/
 message AuthorizationResult {
   string customer_id = 1;
   string sip_trunk_id = 2;
@@ -44,6 +54,9 @@ message AuthorizationResult {
   optional uint32 ttl = 6;
 }
 
+/**
+* A Response including the result
+*/
 message AuthorizationResponse {
   string status = 1;
   string status_code = 2;
@@ -51,6 +64,9 @@ message AuthorizationResponse {
   optional AuthorizationResult authorization_result = 4;
 }
 
+/**
+* Service for handling EST Authentication
+*/
 service ESTAuthService {
   rpc GetAuthorization(AuthorizationRequest) returns (AuthorizationResponse);
 }
