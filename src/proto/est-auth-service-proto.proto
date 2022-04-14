@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.sinch.est.services.auth.grpc.v1";
+option java_outer_classname = "EstAuthService";
+option objc_class_prefix = "Proto";
+
+package com.sinch.est.services.auth.grpc.v1;
+
+message AuthorizationDigest {
+  optional string method = 1;
+  optional string realm = 2;
+  optional string qop = 3;
+  optional string nonce = 4;
+  optional string opaque = 5;
+  optional string username = 6;
+  optional string uri = 7;
+  optional string nc = 8;
+  optional string cnonce = 9;
+  optional string algorithm = 10;
+  optional string stale = 11;
+  optional string response = 12;
+  optional string body = 13;
+}
+
+message AuthorizationRequest {
+  optional string region = 1;
+  optional string source_ip = 2;
+  optional uint32 source_port = 3;
+  optional string method = 4;
+  optional string transport = 5;
+  optional string called_uri = 6;
+  optional string callee_uri = 7;
+  optional string aor = 8; //or aor of the request?
+  AuthorizationDigest auth_digest = 9; // This would be for future registrations.
+}
+
+message AuthorizationResult {
+  string customer_id = 1;
+  string sip_trunk_id = 2;
+  string sip_trunk_region = 3;
+  map<string, int32> key_limit = 4;
+  optional string sip_endpoint_label = 5;
+  optional uint32 ttl = 6;
+}
+
+message AuthorizationResponse {
+  string status = 1;
+  string status_code = 2;
+  string message = 3;
+  optional AuthorizationResult authorization_result = 4;
+}
+
+service ESTAuthService {
+  rpc GetAuthorization(AuthorizationRequest) returns (AuthorizationResponse);
+}
